@@ -1,6 +1,7 @@
-import { NavLink, useLocation } from 'react-router-dom'
+import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import type { ReactNode } from 'react'
-import { LayoutDashboard, Map, Sparkles, LandPlot } from 'lucide-react'
+import { LayoutDashboard, Map, Sparkles, LandPlot, LogOut } from 'lucide-react'
+import { useAuth } from '../auth/AuthContext'
 
 const nav = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard, end: true },
@@ -16,6 +17,21 @@ const titles: Record<string, { title: string; sub: string }> = {
 
 export function Layout({ children }: { children: ReactNode }) {
   const { pathname } = useLocation()
+  const navigate = useNavigate()
+  const { user, logout } = useAuth()
+
+  const initials = (user?.name ?? 'LA')
+    .split(' ')
+    .map((w) => w[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase()
+
+  function handleLogout() {
+    logout()
+    navigate('/login', { replace: true })
+  }
+
   const head =
     titles[pathname] ??
     (pathname.startsWith('/parcels/')
@@ -60,7 +76,19 @@ export function Layout({ children }: { children: ReactNode }) {
             {head.sub && <div className="subtitle">{head.sub}</div>}
           </div>
           <div className="header-right">
-            <div className="avatar">LA</div>
+            {user && (
+              <div className="user-box">
+                <div className="user-meta">
+                  <span className="user-name">{user.name}</span>
+                  <span className="user-role">{user.role}</span>
+                </div>
+                <div className="avatar">{initials}</div>
+              </div>
+            )}
+            <button className="logout-btn" onClick={handleLogout} title="Sign out">
+              <LogOut size={17} />
+              <span>Logout</span>
+            </button>
           </div>
         </header>
         <main className="content">{children}</main>

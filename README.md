@@ -19,6 +19,24 @@ backend or API keys required.
   litigations, documentation, stage duration, etc.) and see the predicted delay
   risk update in real time.
 
+## Access control (login)
+
+The app is gated by a login screen — only authorized government accounts can
+reach the dashboard. Demo credentials:
+
+| Username | Password          | Role                  |
+|----------|-------------------|-----------------------|
+| admin    | landwatch@2025    | System Administrator  |
+| officer  | gov@2025          | Acquisition Officer   |
+
+> **Security note:** this is a **frontend-only** access gate suitable for a
+> demo. Because GitHub Pages is static hosting with no server, credentials
+> checked in the browser are not truly secret. For production government use,
+> replace `authenticate()` in `src/auth/AuthContext.tsx` with a call to a real
+> authentication backend (OAuth2 / OIDC / SSO). The rest of the app is
+> unchanged. The GitHub repository is kept **private** so the source is not
+> publicly available.
+
 ## How the prediction works
 
 The engine (`src/lib/riskEngine.ts`) normalizes each risk signal to a 0–1

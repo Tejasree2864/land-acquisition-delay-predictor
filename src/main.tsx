@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { HashRouter } from 'react-router-dom'
 import App from './App'
+import { AuthProvider } from './auth/AuthContext'
 import './styles/global.css'
 
 // HashRouter is used so client-side routes work on GitHub Pages
@@ -9,7 +10,9 @@ import './styles/global.css'
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <HashRouter>
-      <App />
+      <AuthProvider>
+        <App />
+      </AuthProvider>
     </HashRouter>
   </React.StrictMode>,
 )
